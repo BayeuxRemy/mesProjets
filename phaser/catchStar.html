@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8" />
+	<title>Jeu 1</title>
+	<script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+	<style type="text/css">
+
+		h1
+		{ 
+			text-align:center; 
+		} 
+		#content
+		{ 
+			margin:0 auto; 
+			width:800px; 
+		}
+		#tabScore
+		{
+			position: fixed;
+			right: 50px;
+			top: 100px;
+			text-align: center;
+			width: 100px;
+		}
+
+	</style>
+</head>
+<body> 
+
+	<h1>CATCH THE STAR</h1> 
+	<div id='content'></div>
+	<div id="tabScore">
+		<span id="score1">Star : 0</span>
+		<hr>
+		<span id="score2">Mouse : 0</span>
+	</div> 
+
+<script type="text/javascript">
+	
+	var game = new Phaser.Game(800,600,Phaser.AUTO,'content',{preload: preload, create: create,update:update}); 
+
+	function preload(){ 
+		game.load.image('star','assets/star.png'); 
+		game.load.spritesheet('explo','assets/explosions.png',65,65); 
+	} 
+
+	function create(){ 
+		
+		star=game.add.sprite(0,0,'star'); 
+		star.anchor.setTo (0.5,0.5); 
+		star.angle=0;
+		star.x=0; 
+		star.y=300;
+
+		explo=game.add.sprite(-500,-500,'explo'); 
+		explo.anchor.setTo (0.5,0.5); 
+		explo.animations.add('boom',[48,49,50,51,52,53,54,55,56,57,58,59],10,false); 
+
+		star.inputEnabled=true; 
+		star.events.onInputDown.add(monClic,this); 
+	}
+
+	function monClic()
+	{ 
+		explo.y = star.y;
+		explo.x = star.x;
+		star.kill();
+		explo.play('boom');
+		annim(); 
+	} 
+	function update(){ 
+
+//SI les touches de déplacement sont enfoncé alors il bouge
+		if (game.input.keyboard.isDown(Phaser.Keyboard.UP)==true)
+		{
+			star.y = star.y-5;
+		} 
+		if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN)==true)
+		{
+			star.y = star.y+5;
+		} 
+		if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)==true)
+		{
+			star.x = star.x+5;
+		} 
+		if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)==true)
+		{
+			star.x=star.x-5;
+		} 
+//SI APPUIE sur A est que l'étoile est morte, elle revie;
+	if (game.input.keyboard.isDown(Phaser.Keyboard.ENTER)==true)
+		{
+			if (!(star.alive)) 
+			{
+				star.revive();
+			}
+		}
+//SI une des touche de déplacement est enfoncé, alors l'image est en mouvement (rotation)
+		if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT) == true || game.input.keyboard.isDown(Phaser.Keyboard.RIGHT) == true || game.input.keyboard.isDown(Phaser.Keyboard.DOWN) == true || game.input.keyboard.isDown(Phaser.Keyboard.UP) == true) 
+		{
+			star.angle=star.angle+15;
+		}
+//SI il dépasse les bordure droite/gauche il revient de l'autre coté
+		if (star.x > 800)
+		{
+			star.x = 0;
+		}
+		if (star.x < 0)
+		{
+			star.x = 800;
+		} 
+//SI il dépasse les bordure bas/haut il revient de l'autre coté
+		if (star.y > 600)
+		{
+			star.y = 0;
+		}
+		if (star.y < 0)
+		{
+			star.y = 600;
+		} 
+	}
+
+</script> 
+</body> 
+</html>

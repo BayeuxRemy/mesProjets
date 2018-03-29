@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Casse Brique Game</title>
+	<link rel="stylesheet" type="text/css" href="casseBrique.css">
+</head>
+<body>
+
+	<canvas id="plateau" width="480" height="320"></canvas>
+
+
+
+
+
+
+<script type="text/javascript">
+var plateau = document.getElementById("plateau");
+var ctx = plateau.getContext("2d");
+var tailleBalle = 10;
+var x = plateau.width/2;
+var y = plateau.height-10;
+var dx = 2;
+var dy = -2;
+var paddleHauteur = 10;
+var paddleLongueur = 75;
+var paddleX = (plateau.width-paddleLongueur)/2;
+var toucheDroite = false;
+var toucheGauche = false;
+var ligneDeBrique = 5;
+var colonneDeBrique = 3;
+var briqueLargeur = 75;
+var briqueLongueur = 20;
+var briqueEcart = 10;
+var briquePlacementHaut = 30;
+var briquePlacementGauche = 30;
+var score = 0;
+var Vies = 3;
+
+var briques = [];
+for(c=0; c<colonneDeBrique; c++) {
+    briques[c] = [];
+    for(r=0; r<ligneDeBrique; r++) {
+        briques[c][r] = { x: 0, y: 0, status: 1 };
+    }
+}
+
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
+
+function keyDownHandler(e) {
+    if(e.keyCode == 39) {
+        toucheDroite = true;
+    }
+    else if(e.keyCode == 37) {
+        toucheGauche = true;
+    }
+}
+function keyUpHandler(e) {
+    if(e.keyCode == 39) {
+        toucheDroite = false;
+    }
+    else if(e.keyCode == 37) {
+        toucheGauche = false;
+    }
+}
+function mouseMoveHandler(e) {
+    var relativeX = e.clientX - plateau.offsetLeft;
+    if(relativeX > 0 && relativeX < plateau.width) {
+        paddleX = relativeX - paddleLongueur/2;
+    }
+}
+function collisionDetection() {
+    for(c=0; c<colonneDeBrique; c++) {
+        for(r=0; r<ligneDeBrique; r++) {
+            var b = briques[c][r];
+            if(b.status == 1) {
+                if(x > b.x && x < b.x+briqueLargeur && y > b.y && y < b.y+briqueLongueur) {
+                    dy = -dy;
+                    b.status = 0;
+                    score++;
+                    if(score == ligneDeBrique*colonneDeBrique) {
+                        alert("YOU WIN, CONGRATS!");
+                        document.location.reload();
+                    }
+                }
+            }
+        }
+    }
+}
+
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, tailleBalle, 0, Math.PI*2);
+    //ctx.fillStyle = "#0095DD";
+    //ctx.fill();
+    ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
+    ctx.stroke();
+    ctx.closePath();
+}
+function drawPaddle() {
+    ctx.beginPath();
+    ctx.rect(paddleX, plateau.height-paddleHauteur, paddleLongueur, paddleHauteur);
+    //ctx.fillStyle = "#0095DD";
+    //ctx.fill();
+    ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
+    ctx.stroke();
+    ctx.closePath();
+}
+function drawBriques() {
+    for(c=0; c<colonneDeBrique; c++) {
+        for(r=0; r<ligneDeBrique; r++) {
+            if(briques[c][r].status == 1) {
+                var briqueX = (r*(briqueLargeur+briqueEcart))+briquePlacementGauche;
+                var briqueY = (c*(briqueLongueur+briqueEcart))+briquePlacementHaut;
+                briques[c][r].x = briqueX;
+                briques[c][r].y = briqueY;
+                ctx.beginPath();
+                ctx.rect(briqueX, briqueY, briqueLargeur, briqueLongueur);
+                //ctx.fillStyle = "#0095DD";
+                //ctx.fill();
+                ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
+                ctx.stroke();           
+                ctx.closePath();
+            }
+        }
+    }
+}
+function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: "+score, 8, 20);
+}
+function drawVies() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Vies: "+Vies, plateau.width-65, 20);
+}
+
+function draw() {
+    ctx.clearRect(0, 0, plateau.width, plateau.height);
+    drawBriques();
+    drawBall();
+    drawPaddle();
+    drawScore();
+    drawVies();
+    collisionDetection();
+    
+    if(x + dx > plateau.width-tailleBalle || x + dx < tailleBalle) {
+        dx = -dx;
+    }
+    if(y + dy < tailleBalle) {
+        dy = -dy;
+    }
+    else if(y + dy > plateau.height-tailleBalle) {
+        if(x > paddleX && x < paddleX + paddleLongueur) {
+            dy = -dy;
+        }
+        else {
+            Vies--;
+            if(!Vies) {
+                alert("GAME OVER");
+                document.location.reload();
+            }
+            else {
+                x = plateau.width/2;
+                y = plateau.height-30;
+                dx = 3;
+                dy = -3;
+                paddleX = (plateau.width-paddleLongueur)/2;
+            }
+        }
+    }
+    
+    if(toucheDroite && paddleX < plateau.width-paddleLongueur) {
+        paddleX += 7;
+    }
+    else if(toucheGauche && paddleX > 0) {
+        paddleX -= 7;
+    }
+    
+    x += dx;
+    y += dy;
+    requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>

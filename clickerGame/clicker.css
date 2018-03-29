@@ -1,0 +1,323 @@
+h1, h2, h3 {
+  text-align: center;
+}
+/***SCORE***/
+.compteur {
+  position: relative;
+  text-align: center;
+  font-size: 200%;
+  border-style: double;
+  border-radius: 15px;
+  top :50px;
+}
+/****MENUS***/
+.boutique {
+  position: absolute;
+  border-style: solid;
+  top:25%;
+  width: 40%;
+}
+.boutique p
+{
+  position: relative;
+  text-align: center;
+}
+.achat {
+  width: 100%;
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: black;
+  background-color: white;
+  border-radius: 50px;
+}
+.bonus #desc1 {
+    visibility: hidden;
+    width: 80%;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position  desc text */
+    position: absolute;
+    z-index: 1;
+    bottom: 80%;
+    left: 20%;
+    margin-left: -60px;
+
+    /* Fade in desc */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Tooltip arrow */
+.bonus #desc1::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.bonus:hover #desc1 {
+    visibility: visible;
+    opacity: 1;
+} 
+.bonus #desc2 {
+    visibility: hidden;
+    width: 80%;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position  desc text */
+    position: absolute;
+    z-index: 1;
+    bottom: 52%;
+    left: 20%;
+    margin-left: -60px;
+
+    /* Fade in desc */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Tooltip arrow */
+.bonus #desc2::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.bonus:hover #desc2 {
+    visibility: visible;
+    opacity: 1;
+} 
+.bonus #desc3 {
+    visibility: hidden;
+    width: 80%;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position  desc text */
+    position: absolute;
+    z-index: 1;
+    bottom: 23%;
+    left: 20%;
+    margin-left: -60px;
+
+    /* Fade in desc */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Tooltip arrow */
+.bonus #desc3::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.bonus:hover #desc3 {
+    visibility: visible;
+    opacity: 1;
+} 
+.stats
+{
+  position: absolute;
+  border: solid;
+  top: 25%;
+  width: 40%;
+  right: 10px;
+}
+.sousTitre
+{
+  position: relative;
+  left: -30px;
+  text-decoration: underline; 
+}
+/***BUTTON CLICKER***/
+.clicker {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: red;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 9px #999;
+  top:250px;
+  right: 45%;
+  position: absolute;
+  //width: 100%;
+}
+
+.clicker:hover {background-color: grey}
+
+.clicker:active {
+  background-color: black;
+  box-shadow: 0 2px #666;
+  transform: translateY(6px);
+}
+/***MESSAGES***/
+.alert {
+  position: fixed;
+  top: 30px;
+  right: 40%;
+  left: 40%;
+  text-align: center;
+  padding: 20px;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+#noMoney { 
+  display: none;
+  background-color: #ff9800;
+}
+#achatReussi {
+  display: none;
+  background-color: #4CAF50;}
+.alert:hover {
+  opacity: 0.7;
+}
+/***RACE BATTLE***/
+.arenaRace {
+  position: absolute;
+  top: 75%;
+  width: 1580px;
+  right: 0px;
+}
+.arenaRace #lvl {
+  position: relative;
+  text-align: center;
+  top: -25px;
+  font-family: 'impact';
+}
+.arenaRace #roadRace {
+    height: 180px;
+    position: relative;
+    background-image: url('pisteCourse.jpg');
+}
+
+.arenaRace #raceOn
+{
+  position: relative;
+  font-family: 'impact';
+  left: 48%;
+  top: -15px;
+  display: inline-block;
+  padding: 5px 5px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: black;
+  border: none;
+  border-radius: 25px;
+  box-shadow: 0 5px #999;
+}
+
+.arenaRace #raceOn:hover {background-color: grey}
+
+.arenaRace #raceOn:active {
+  background-color: green;
+  box-shadow: 0 1px #666;
+  transform: translateY(6px);
+}
+
+.arenaRace #finish {
+    height: 180px;
+    position: absolute;
+    text-align: center;
+    background: red;
+    right: 0px;
+    width: 25px;
+}
+.arenaRace #txtFinish {
+  position: relative;
+  font-family: 'impact';
+  top: 30px;
+}
+.arenaRace #myCar {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top : 15px;
+    background: blue;
+}
+.arenaRace #ennemyCar {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background: red;
+    top: 115px;
+}
+
+.car .name {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position  name text */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+
+    /* Fade in name */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Tooltip arrow */
+.car .name::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.car:hover .name {
+    visibility: visible;
+    opacity: 1;
+} 

@@ -1,0 +1,32 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+ 	<title></title>
+ </head>
+ <body>
+
+ <script type="text/javascript">
+/* Voici la fonction javascript qui change la propriété "display"
+pour afficher ou non le div selon que ce soit "none" ou "block". */
+ 
+function AfficherMasquer()
+{
+divInfo = document.getElementById('divacacher');
+ 
+if (divInfo.style.display == 'none')
+divInfo.style.display = 'block';
+else
+divInfo.style.display = 'none';
+ 
+}
+</script>
+ 
+<!--La c'est le bouton qui va afficher le div en cliquant dessus. -->
+<input type="button" value="Afficher ou Masquer" onClick="AfficherMasquer()" />
+ 
+<!-- Ca c'est le div en question qui possède l'id indiqué dans
+la fonction. -->
+<div id="divacacher" style="display:none;">BLABLABLABLA</div>
+ 
+ </body>
+ </html>

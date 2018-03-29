@@ -1,0 +1,404 @@
+<!DOCTYPE html> 
+<html lang=fr>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="clicker.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<title>Cliker game</title>
+</head>
+<body>
+<h1>Course du click </h1>
+
+<div class="compteur" id="score">0</div>
+
+<button class="clicker" id="bouton">Click-here</button>
+
+<div class="boutique"><h3>Bonus :</h3>
+    <hr>
+    <div class="bonus"><button class="achat" id="achat">Clicker Up</button><p id="prix1"></p><span id="desc1"></span></div>
+    <hr>
+    <div class="bonus"><button class="achat" id="achat2">Timer Up</button><p id="prix2"></p><span id="desc2"></span></div>
+    <hr>
+    <div class="bonus"><button class="achat" id="achat3">Speed Up</button><p id="prix3"></p><span id="desc3"></span></div>
+</div>
+
+<div class="stats"><h3>Caractéristique :</h3>
+    <hr>
+    <ul><span class="sousTitre">Gain :</span>
+        <li><p id="multiplicateur"></p></li>
+        <li><p id="timer"></p></li>
+    </ul>
+    <ul><span class="sousTitre">Voiture :</span>
+        <li> <p id="vitesse"></p></li>
+    </ul>
+</div>
+
+
+<div class="alert" id="noMoney">
+  <strong>Attention!</strong> Votre score est insuffisant!
+</div>
+
+<div class="alert" id="achatReussi">
+  <strong>Bravo!</strong> Votre achat est confirmé.
+</div>
+
+
+
+<div class="arenaRace">
+    <h2>Race Battle</h2>
+    <p id="lvl"></p>
+    <button id="raceOn" onclick="myMove(),ennemyMove(),buttonOff()"  visibility="visible">RACE ON</button>
+    <div id ="roadRace">
+        <div class="car" id ="myCar"><span class="name">you</span></div>
+        <div class="car" id ="ennemyCar"><span class="name">ennemy</span></div>
+        <div id="finish"><span id="txtFinish">F<br>I<br>N<br>I<br>S<br>H</span></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+/****DECLARATION DES VARIABLE QUI RECUPERE LES ELEMENTS****/
+$bouton = document.getElementById("bouton");
+$achat1 = document.getElementById("achat");
+$desc1 = document.getElementById("desc1");
+$prix1 = document.getElementById("prix1");
+$achat2 = document.getElementById("achat2");
+$desc2 = document.getElementById("desc2");
+$prix2 = document.getElementById("prix2");
+$achat3 = document.getElementById("achat3");
+$desc3 = document.getElementById("desc3");
+$prix3= document.getElementById("prix3");
+$multiplicateur = document.getElementById("multiplicateur");
+$timer = document.getElementById("timer");
+$score = document.getElementById("score");
+$msg = document.getElementById("noMoney");
+$myCar = document.getElementById("myCar"); 
+$ennemyCar = document.getElementById("ennemyCar");
+$buttonRaceOn = document.getElementById("raceOn");
+$vitesse = document.getElementById("vitesse");
+$lvl = document.getElementById("lvl");
+/**INITIALISATION**/
+score = 0;
+nbMultiplicateur = 0;
+nbPtsParSeconde = 0;
+mySpeed = 0.0;
+ennemySpeed = 0.05;
+niveau = 1;
+win = false;
+lose = false;
+speedUp = 0.01;
+
+/****FONCTION D'AFFICHAGE*****/
+function afficherScore() {
+    $score.innerHTML = "Score : " + score.toFixed(0);
+}
+function afficherAchat1(){
+    $desc1.innerHTML = "+1pts par click et + 0.00001km/h par click";
+}
+function afficherAchat2(){
+    $desc2.innerHTML = "+1pts par seconde et 0.00001km/h par seconde";
+}
+function afficherAchat3(){
+    $desc3.innerHTML = "+"+ speedUp.toFixed(2) +" km/h à l'achat";
+}
+function afficherNbMultiplicateur() {
+    $multiplicateur.innerHTML = "Nombre de points par click : " + nbMultiplicateur + "<br> Nombre de km/h en + par click : "+(nbMultiplicateur*0.00001).toFixed(5);
+}
+function afficherPtsParSeconde() {
+    $timer.innerHTML = "Nombre de points par seconde : " + nbPtsParSeconde+ "<br> Nombre de km/h en + par seconde : "+(nbPtsParSeconde*0.00001).toFixed(5);
+}
+function afficherPrix1(){
+    $prix1.innerHTML = "Coût : " + prix1() + " pts";
+}
+function afficherPrix2(){
+    $prix2.innerHTML = "Coût : " + prix2() + " pts";
+}
+function afficherPrix3(){
+    $prix3.innerHTML = "Coût : " + prix3().toFixed(0) + " pts";
+}
+function afficherVitesse(){
+    $vitesse.innerHTML = "Vitesse : " + mySpeed.toFixed(3) + " km/h";
+}
+function afficherLvl(){
+    $lvl.innerHTML = "Niveau "+ niveau ;
+}
+/***FONCTION CLIC***/
+function clic() {
+    score += nbMultiplicateur;
+    mySpeed += nbMultiplicateur*0.00001;
+    afficherVitesse();
+    afficherScore();
+}
+
+/****PRIX DES BONUS*****/
+function prix1() {
+    if (nbMultiplicateur<5)
+    {
+      return 20 * nbMultiplicateur;  
+    }
+    else
+    {
+        if (nbMultiplicateur<10)
+        {
+            return 40 * nbMultiplicateur;
+        }
+        else
+        {
+            if (nbMultiplicateur<15)
+            {
+                return 100 * nbMultiplicateur;
+            }
+            else
+            {
+                if (nbMultiplicateur<20)
+                {
+                    return 180 * nbMultiplicateur;
+                }
+                else
+                {
+                    if (nbMultiplicateur<50)
+                    {
+                        return 250 * nbMultiplicateur;
+                    }
+                    else
+                    {
+                        return 400 * nbMultiplicateur;
+                    }
+
+                }
+            }    
+        }
+
+    }
+}
+function prix2() {
+    if (nbPtsParSeconde == 0)
+    {
+        return 100;
+    }
+    else
+    {
+        if (nbPtsParSeconde < 5)
+        {     
+            return  150 * nbPtsParSeconde;
+        }    
+        else 
+        {
+            if (nbPtsParSeconde < 15)
+            {
+                return 250 * nbPtsParSeconde;
+            }
+            else
+            {   
+                if (nbPtsParSeconde < 35)
+                {
+                    return 400 * nbPtsParSeconde;
+                }
+                else
+                {
+                    return 600 * nbPtsParSeconde;
+                }
+            }
+        }
+    }
+}
+function prix3() {
+    if (niveau==1) 
+    {
+        return 150
+    }
+    else
+    {
+        if (niveau<10)
+        {
+            return 200 * niveau;
+        }
+        else 
+        {
+            return 1000* niveau * (niveau/10); 
+        }
+    }
+}   
+/***ACHAT DES BONUS*****/
+function acheterMultiplicateur() {
+    if (score >= prix1()) {
+        score = score - prix1();
+        nbMultiplicateur = nbMultiplicateur + 1;
+        afficher_achatReussi();
+        afficherNbMultiplicateur();
+        afficherAchat1();
+        afficherPrix1();
+        afficherScore();
+    } else {
+        //alert("Votre score est insuffisant !");
+        afficher_noMoney()
+    }
+}
+
+function acheterPtsParSeconde() {
+    if (score >= prix2()) {
+        score = score - prix2();
+        nbPtsParSeconde += 1;  
+        afficher_achatReussi();
+        afficherPtsParSeconde();
+        afficherPrix2();
+        afficherScore();
+    } else {
+       // alert("Votre score est insuffisant !");
+       afficher_noMoney()
+    }
+}
+
+function acheterBoostSpeed() {
+    if (score >= prix3()) {
+        score = score - prix3();
+        mySpeed += speedUp; 
+        afficher_achatReussi();
+        afficherVitesse();
+        afficherAchat3();
+        afficherPrix3();
+        afficherScore();
+    } else {
+       // alert("Votre score est insuffisant !");
+       afficher_noMoney()
+    }
+}
+/***TIMER POUR PTS PAR SECONDE****/
+function timer() {
+    setInterval( function ptsParSeconde() {
+        score += nbPtsParSeconde;
+        mySpeed += nbPtsParSeconde*0.00001;
+        afficherScore();
+        afficherAchat2();
+        afficherVitesse();
+    },1000);
+}
+/***MESSAGES****/
+function afficher_noMoney() {
+    document.getElementById("noMoney").style.display = "block";
+    setInterval ( function() { 
+        document.getElementById('noMoney').style.display = 'none';
+    },3000);
+    clearInterval();
+}
+function afficher_achatReussi() {
+    document.getElementById("achatReussi").style.display = "block";
+      setInterval ( function() { 
+        document.getElementById('achatReussi').style.display = 'none';
+    },3000);
+    clearInterval();
+}
+
+/*******RACE BATTLE ********/
+function niveauSup()
+{   
+    if (niveau<10)
+    {
+        ennemySpeed +=0.20;
+        speedUp+=0.01*niveau;
+    }
+    if (niveau>=10)
+    {
+        ennemySpeed += 1+(0.01*niveau);
+        speedUp+=0.2+(0.01*niveau);
+        if (niveau > 15)
+        {
+            ennemySpeed += 2+(0.01*niveau);
+            if (niveau >25)
+            {
+                ennemySpeed += 1.50+(0.1*niveau);
+            }
+        }
+    }
+    //alert("vitesse ennemy : "+ ennemySpeed +" km/h")
+    afficherAchat3();
+    afficherPrix3();
+}
+
+function buttonOn()
+{
+    $buttonRaceOn.style.visibility="visible";
+}
+function buttonOff()
+{
+    $buttonRaceOn.style.visibility="hidden";
+}
+
+function myMove() { 
+  var pos = 0;
+  var id = setInterval(frame, 1);
+  function frame() {
+    if (pos >= 1515) {
+        win = true;
+        niveau+=1;
+        alert("Tu as gagné ! Tu passes au niveau "+niveau+" ! "); 
+        clearInterval(id);
+        pos = 0;
+        myCar.style.left="0px";
+        afficherLvl();
+        niveauSup();
+        buttonOn()
+    } else {
+        if(lose)
+        {
+            clearInterval(id);
+            pos=0;
+            myCar.style.left="0px";
+            lose=false;
+        }
+        else
+        {
+            pos+= mySpeed;
+            myCar.style.left = pos + 'px'; 
+        }
+      
+    }
+  }
+}
+function ennemyMove() {  
+var pos = 0;
+  var id = setInterval(frame, 1);
+  function frame() {
+    if (pos >= 1515) {
+      lose = true;  
+      alert("Tu as perdu ...");
+      clearInterval(id);
+      pos=0;
+      ennemyCar.style.left="0px";
+      buttonOn();
+    } else {
+        if(win)
+        {
+            clearInterval(id);
+            pos=0;
+            ennemyCar.style.left="0px";
+            win=false;
+        }
+        else
+        {
+            pos+= ennemySpeed;
+            ennemyCar.style.left = pos + 'px'; 
+        }
+    }
+  }
+}
+/***Déclenchement des fonctions***/
+$bouton.onclick = clic;
+$achat1.onclick = acheterMultiplicateur;
+$achat2.onclick = acheterPtsParSeconde;
+$achat3.onclick = acheterBoostSpeed;
+afficherNbMultiplicateur();
+afficherPtsParSeconde();
+afficherAchat1();
+afficherAchat2();
+afficherAchat3();
+afficherPrix1();
+afficherPrix2();
+afficherPrix3();
+afficherScore();
+afficherVitesse();
+afficherLvl();
+timer();
+</script>
+</body>
+</html>
